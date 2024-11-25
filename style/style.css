@@ -1,0 +1,86 @@
+:root {
+  --bg-color: #181818;
+  --main-color: #FF7700;
+}
+
+::selection {
+  color: var(--bg-color);
+  background: var(--main-color);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-color);
+}
+
+body {
+  font-family: "Helvetica", "Arial", sans-serif;
+}
+
+main {
+  display: flex;
+}
+
+#intro {
+  float: left;
+  width: 300px;
+  height: 300px;
+  shape-outside: circle(50% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
+  background: var(--main-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+  font-size: 24px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#intro > * {
+  padding: 0.5em;
+  text-align: center;
+}
+
+#nav {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.play {
+  font-size: calc(100vw / 16);
+  color: var(--main-color);
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.play:hover {
+  text-decoration: underline;
+}
+
+#manifesto {
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#word-display {
+  text-align: center;
+  font-size: calc(100vw / 16);
+  color: #ffffff;
+}
