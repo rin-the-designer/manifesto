@@ -182,35 +182,3 @@ const midiStems = {
 
 }
 
-// Add a function to handle the midi playback
-function playMidiStems(currentCentiseconds) {
-  if (midiStems[currentCentiseconds]) {
-    midiStems[currentCentiseconds].forEach(stem => {
-      const [type, value] = stem;
-      const midiType = midiTypes[type];
-      console.log(`${currentCentiseconds}: ${midiType}, ${value}`);
-    });
-  }
-}
-
-let midiInterval = null;
-let currentCentiseconds = 0;
-
-function startMidiPlayback() {
-  if (midiInterval) {
-    clearInterval(midiInterval);
-  }
-  
-  midiInterval = setInterval(() => {
-    playMidiStems(currentCentiseconds);
-    currentCentiseconds += 1;
-  }, 10); // Check every centisecond (10ms)
-}
-
-function pauseMidiPlayback() {
-  if (midiInterval) {
-    clearInterval(midiInterval);
-    midiInterval = null;
-    // Don't reset currentFrame, so it remembers where it was
-  }
-}

@@ -48,16 +48,36 @@ function togglePlay() {
             isFirstPlay = false;
         }
         playButton.textContent = "Pause";
+        $('#nav').fadeIn(300);
+        setTimeout(() => {
+            $('#nav').fadeOut(300);
+        }, 1000);
     } else {
         audioElement.pause();
         pauseWordDisplay();
         playButton.textContent = "Play";
+        $('#nav').fadeIn(300);
     }
 }
+
+// Add mouse movement handler
+let timeout;
+$(document).mousemove(function() {
+    if (!audioElement.paused) {
+        $('#nav').fadeIn(300);
+        
+        clearTimeout(timeout);
+        
+        timeout = setTimeout(() => {
+            $('#nav').fadeOut(300);
+        }, 2000);
+    }
+});
 
 function onAudioEnded() {
     playButton.textContent = "Restart";
     $intro.fadeIn(300);
+    $('#nav').fadeIn(300);
     pauseWordDisplay();
 }
 

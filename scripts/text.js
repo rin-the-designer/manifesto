@@ -1,37 +1,52 @@
 let manifestoWords = [];
+let mainWords = [];
 let currentWordIndex = 0;
 let wordInterval;
+let currentTextSource = 'main';
 
-function loadManifesto() {
-    // Load the manifesto text file
+function loadTexts() {
+    // Load main.txt
+    fetch('assets/text/main.txt')
+        .then(response => response.text())
+        .then(text => {
+            mainWords = text.split(/\s+/).filter(word => word.length > 0);
+        })
+        .catch(error => console.error('Error loading main text:', error));
+
+    // Load manifesto.txt
     fetch('assets/text/manifesto.txt')
         .then(response => response.text())
         .then(text => {
-            // Split the text into words and remove empty strings
             manifestoWords = text.split(/\s+/).filter(word => word.length > 0);
         })
         .catch(error => console.error('Error loading manifesto:', error));
 }
 
 function startWordDisplay() {
-    if (currentWordIndex >= manifestoWords.length) {
+    if (currentWordIndex >= getCurrentWords().length) {
         currentWordIndex = 0;
+        // Switch to manifesto after main text completes
+        if (currentTextSource === 'main') {
+            currentTextSource = 'manifesto';
+        }
     }
     
     wordInterval = setInterval(() => {
-        if (currentWordIndex < manifestoWords.length) {
+        const currentWords = getCurrentWords();
+        if (currentWordIndex < currentWords.length) {
             const wordDisplay = document.getElementById('word-display');
-            // Get random color pair from predefinedColors
             const randomColorPair = predefinedColors[Math.floor(Math.random() * predefinedColors.length)];
             
-            wordDisplay.textContent = manifestoWords[currentWordIndex];
-            // Apply the background and text colors
+            wordDisplay.textContent = currentWords[currentWordIndex];
             wordDisplay.style.backgroundColor = randomColorPair[0];
             wordDisplay.style.color = randomColorPair[1];
             
             currentWordIndex++;
         } else {
             currentWordIndex = 0;
+            if (currentTextSource === 'main') {
+                currentTextSource = 'manifesto';
+            }
         }
     }, 500);
 }
@@ -40,5 +55,10 @@ function pauseWordDisplay() {
     clearInterval(wordInterval);
 }
 
-// Call this when your page loads
-loadManifesto();
+// Helper function to get current word array
+function getCurrentWords() {
+    return currentTextSource === 'main' ? mainWords : manifestoWords;
+}
+
+// Update the initial load call
+loadTexts();
