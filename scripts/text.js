@@ -5,6 +5,7 @@ let textCollections = {
     main: [],
     manifesto: []
 };
+let isTextLoaded = false;
 
 // Load text from file
 async function loadText(filename) {
@@ -19,8 +20,13 @@ async function loadText(filename) {
 }
 
 async function loadTexts() {
-    textCollections.main = await loadText('main');
-    textCollections.manifesto = await loadText('manifesto');
+    try {
+        textCollections.main = await loadText('main');
+        textCollections.manifesto = await loadText('manifesto');
+        isTextLoaded = true;
+    } catch (error) {
+        console.error('Error loading texts:', error);
+    }
 }
 
 function displaySingleWord(words, container) {

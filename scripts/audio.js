@@ -1,10 +1,15 @@
 const audioElement = document.querySelector("audio");
 const playButton = document.querySelector("#play");
 let isFirstPlay = true;
+let isAudioLoaded = false;
 
 audioElement.addEventListener('play', startMidiPlayback);
 audioElement.addEventListener('pause', pauseMidiPlayback);
 
+// Add audio loading check
+audioElement.addEventListener('canplaythrough', () => {
+    isAudioLoaded = true;
+});
 
 // Media Session API for audio controls and metadata
 if ('mediaSession' in navigator) {
@@ -36,11 +41,19 @@ if ('mediaSession' in navigator) {
     });
 }
 
-function togglePlay() {
+async function togglePlay() {
     const $intro = $('#intro');
 
+    // Wait for both audio and text to be loaded
+    if (!isAudioLoaded || !isTextLoaded) {
+        console.log('Still loading resources...');
+        return;
+    }
+
     if (audioElement.paused) {
-        audioElement.play();
+        // Reset timing variables
+        currentCentiseconds = 0;
+        await audioElement.play();
         startWordDisplay();
         
         if (isFirstPlay) {
