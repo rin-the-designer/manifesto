@@ -22,9 +22,7 @@ async function loadTexts() {
     try {
         textCollections.main = await loadText('main');
         textCollections.manifesto = await loadText('manifesto');
-        console.log('Text loaded');
         isTextLoaded = true;
-        checkResourcesLoaded();
     } catch (error) {
         console.error('Error loading texts:', error);
     }

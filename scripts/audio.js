@@ -5,12 +5,6 @@ let isFirstPlay = true;
 audioElement.addEventListener('play', startMidiPlayback);
 audioElement.addEventListener('pause', pauseMidiPlayback);
 
-// Add this event listener to track when audio is loaded
-audioElement.addEventListener('canplaythrough', () => {
-    console.log('Audio loaded');
-    isAudioLoaded = true;
-    checkResourcesLoaded();
-});
 
 // Media Session API for audio controls and metadata
 if ('mediaSession' in navigator) {
@@ -42,39 +36,21 @@ if ('mediaSession' in navigator) {
     });
 }
 
-// Update audio element setup
-audioElement.preload = "auto";  // Ensure preload is set
-audioElement.playsinline = true;  // Enable inline playback
-audioElement.setAttribute('webkit-playsinline', 'true');  // For older iOS versions
-
-// Modify togglePlay function
 function togglePlay() {
     const $intro = $('#intro');
 
-    // Add promise handling for iOS
     if (audioElement.paused) {
-        const playPromise = audioElement.play();
+        audioElement.play();
+        startWordDisplay();
         
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                startWordDisplay();
-                
-                if (isFirstPlay) {
-                    $intro.fadeOut(0);
-                    isFirstPlay = false;
-                    $('#nav').hide();
-                } 
+        if (isFirstPlay) {
+            $intro.fadeOut(0);
+            isFirstPlay = false;
+            $('#nav').hide();
+        } 
 
-                playButton.textContent = "Pause";
-                document.body.style.cursor = 'none';
-            })
-            .catch(error => {
-                // Handle play error (likely autoplay policy)
-                console.error("Playback failed:", error);
-                // Show some user feedback
-                playButton.textContent = "Tap to Play";
-            });
-        }
+        playButton.textContent = "Pause";
+        document.body.style.cursor = 'none';
     } else {
         audioElement.pause();
         pauseWordDisplay();
@@ -83,26 +59,6 @@ function togglePlay() {
         document.body.style.cursor = 'default';
     }
 }
-
-// Add this function to handle initial user interaction
-function initAudio() {
-    // Create and play a silent audio context
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audioCtx = new AudioContext();
-    
-    // Resume audio context on user interaction
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
-    
-    // Remove the initialization once it's done
-    document.body.removeEventListener('touchstart', initAudio);
-    document.body.removeEventListener('click', initAudio);
-}
-
-// Add event listeners for user interaction
-document.body.addEventListener('touchstart', initAudio);
-document.body.addEventListener('click', initAudio);
 
 // Mouse movement and keyboard handler
 let timeout;

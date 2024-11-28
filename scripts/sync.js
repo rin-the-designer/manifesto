@@ -52,14 +52,10 @@ function startMidiPlayback() {
     clearInterval(midiInterval);
   }
   
-  const startTime = Date.now();
-  const initialAudioTime = audioElement.currentTime * 100;  // Convert to centiseconds
-  
   midiInterval = setInterval(() => {
-    // Calculate precise currentCentiseconds based on audio time
-    currentCentiseconds = Math.floor(audioElement.currentTime * 100);
     playMidiStems(currentCentiseconds);
-  }, 10);
+    currentCentiseconds += 1;
+  }, 10); // Check every centisecond (10ms)
 }
 
 function pauseMidiPlayback() {
