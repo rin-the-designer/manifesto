@@ -48,10 +48,12 @@ function togglePlay() {
             isFirstPlay = false;
             $('#nav').hide();
         } else {
-            $('#nav').fadeIn(300);
-            setTimeout(() => {
-                $('#nav').fadeOut(300);
-            }, 1500);
+            if (!$intro.is(':visible')) {
+                $('#nav').fadeIn(300);
+                setTimeout(() => {
+                    $('#nav').fadeOut(300);
+                }, 1500);
+            }
         }
         playButton.textContent = "Pause";
     } else {
@@ -68,12 +70,15 @@ $(document).on('mousemove keydown', function(e) {
     // Only trigger for spacebar
     if (e.type === 'keydown' && e.code !== 'Space') return;
     
+    const $intro = $('#intro');
     $('#nav').fadeIn(300);
-    clearTimeout(timeout);
     
-    timeout = setTimeout(() => {
-        $('#nav').fadeOut(300);
-    }, 1500);
+    if (!$intro.is(':visible')) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            $('#nav').fadeOut(300);
+        }, 1500);
+    }
 });
 
 function onAudioEnded() {
