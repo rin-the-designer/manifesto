@@ -112,3 +112,8 @@ main {
   margin: 0.1em 0;
   transition: all 0.3s ease;
 }
+
+audio {
+  width: 0;
+  height: 0;
+}

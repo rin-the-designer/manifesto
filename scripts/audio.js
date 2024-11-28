@@ -42,21 +42,39 @@ if ('mediaSession' in navigator) {
     });
 }
 
+// Update audio element setup
+audioElement.preload = "auto";  // Ensure preload is set
+audioElement.playsinline = true;  // Enable inline playback
+audioElement.setAttribute('webkit-playsinline', 'true');  // For older iOS versions
+
+// Modify togglePlay function
 function togglePlay() {
     const $intro = $('#intro');
 
+    // Add promise handling for iOS
     if (audioElement.paused) {
-        audioElement.play();
-        startWordDisplay();
+        const playPromise = audioElement.play();
         
-        if (isFirstPlay) {
-            $intro.fadeOut(0);
-            isFirstPlay = false;
-            $('#nav').hide();
-        } 
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                startWordDisplay();
+                
+                if (isFirstPlay) {
+                    $intro.fadeOut(0);
+                    isFirstPlay = false;
+                    $('#nav').hide();
+                } 
 
-        playButton.textContent = "Pause";
-        document.body.style.cursor = 'none';
+                playButton.textContent = "Pause";
+                document.body.style.cursor = 'none';
+            })
+            .catch(error => {
+                // Handle play error (likely autoplay policy)
+                console.error("Playback failed:", error);
+                // Show some user feedback
+                playButton.textContent = "Tap to Play";
+            });
+        }
     } else {
         audioElement.pause();
         pauseWordDisplay();
@@ -65,6 +83,26 @@ function togglePlay() {
         document.body.style.cursor = 'default';
     }
 }
+
+// Add this function to handle initial user interaction
+function initAudio() {
+    // Create and play a silent audio context
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+    
+    // Resume audio context on user interaction
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    
+    // Remove the initialization once it's done
+    document.body.removeEventListener('touchstart', initAudio);
+    document.body.removeEventListener('click', initAudio);
+}
+
+// Add event listeners for user interaction
+document.body.addEventListener('touchstart', initAudio);
+document.body.addEventListener('click', initAudio);
 
 // Mouse movement and keyboard handler
 let timeout;
