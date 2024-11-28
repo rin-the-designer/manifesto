@@ -44,23 +44,19 @@ function togglePlay() {
         startWordDisplay();
         
         if (isFirstPlay) {
-            $intro.fadeOut(300);
+            $intro.fadeOut(0);
             isFirstPlay = false;
             $('#nav').hide();
-        } else {
-            if (!$intro.is(':visible')) {
-                $('#nav').fadeIn(300);
-                setTimeout(() => {
-                    $('#nav').fadeOut(300);
-                }, 1500);
-            }
-        }
+        } 
+
         playButton.textContent = "Pause";
+        document.body.style.cursor = 'none';
     } else {
         audioElement.pause();
         pauseWordDisplay();
         playButton.textContent = "Play";
         $('#nav').fadeIn(300);
+        document.body.style.cursor = 'default';
     }
 }
 
@@ -72,11 +68,13 @@ $(document).on('mousemove keydown', function(e) {
     
     const $intro = $('#intro');
     $('#nav').fadeIn(300);
+    document.body.style.cursor = 'default';
     
     if (!$intro.is(':visible')) {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
             $('#nav').fadeOut(300);
+            document.body.style.cursor = 'none';
         }, 1500);
     }
 });
@@ -85,6 +83,7 @@ function onAudioEnded() {
     playButton.textContent = "Restart";
     $intro.fadeIn(300);
     $('#nav').fadeIn(300);
+    document.body.style.cursor = 'default';
     pauseWordDisplay();
 }
 
@@ -92,6 +91,7 @@ $(function() {
 
 	function initEvents() {
 		$("#play").on('mousedown', togglePlay);
+        $("#play").on('keydown', togglePlay);
 		audioElement.addEventListener('ended', onAudioEnded);
 	}
 
