@@ -1,14 +1,15 @@
 const audioElement = document.querySelector("audio");
 const playButton = document.querySelector("#play");
 let isFirstPlay = true;
-let isAudioLoaded = false;
 
 audioElement.addEventListener('play', startMidiPlayback);
 audioElement.addEventListener('pause', pauseMidiPlayback);
 
-// Add audio loading check
+// Add this event listener to track when audio is loaded
 audioElement.addEventListener('canplaythrough', () => {
+    console.log('Audio loaded');
     isAudioLoaded = true;
+    checkResourcesLoaded();
 });
 
 // Media Session API for audio controls and metadata
@@ -41,19 +42,11 @@ if ('mediaSession' in navigator) {
     });
 }
 
-async function togglePlay() {
+function togglePlay() {
     const $intro = $('#intro');
 
-    // Wait for both audio and text to be loaded
-    if (!isAudioLoaded || !isTextLoaded) {
-        console.log('Still loading resources...');
-        return;
-    }
-
     if (audioElement.paused) {
-        // Reset timing variables
-        currentCentiseconds = 0;
-        await audioElement.play();
+        audioElement.play();
         startWordDisplay();
         
         if (isFirstPlay) {

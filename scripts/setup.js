@@ -1,3 +1,6 @@
+let isAudioLoaded = false;
+let isTextLoaded = false;
+
 let predefinedColors = [
     ["#FF7700", "#181818"],
     ["#FFAA22", "#181818"],
@@ -18,3 +21,14 @@ document.addEventListener('keydown', (event) => {
       togglePlay();
   }
 });
+
+function checkResourcesLoaded() {
+  console.log('Checking resources:', { audio: isAudioLoaded, text: isTextLoaded });
+  if (isAudioLoaded && isTextLoaded) {
+      playButton.textContent = "Play";
+      playButton.disabled = false;
+  } else {
+      playButton.textContent = "Loading...";
+      playButton.disabled = true;
+  }
+}
