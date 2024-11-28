@@ -1,54 +1,77 @@
-let manifestoWords = [];
-let mainWords = [];
 let currentWordIndex = 0;
 let wordInterval;
 let currentTextSource = 'main';
+let textCollections = {
+    main: [],
+    manifesto: []
+};
 
-function loadTexts() {
-    // Load main.txt
-    fetch('assets/text/main.txt')
-        .then(response => response.text())
-        .then(text => {
-            mainWords = text.split(/\s+/).filter(word => word.length > 0);
-        })
-        .catch(error => console.error('Error loading main text:', error));
-
-    // Load manifesto.txt
-    fetch('assets/text/manifesto.txt')
-        .then(response => response.text())
-        .then(text => {
-            manifestoWords = text.split(/\s+/).filter(word => word.length > 0);
-        })
-        .catch(error => console.error('Error loading manifesto:', error));
+async function loadText(filename) {
+    try {
+        const response = await fetch(`assets/text/${filename}.txt`);
+        const text = await response.text();
+        return text.split(/\s+/).filter(word => word.length > 0);
+    } catch (error) {
+        console.error(`Error loading ${filename}:`, error);
+        return [];
+    }
 }
 
+async function loadTexts() {
+    textCollections.main = await loadText('main');
+    textCollections.manifesto = await loadText('manifesto');
+}
+
+function displayWordByWord(words, container) {
+  if (currentWordIndex < words.length) {
+    container.textContent = words[currentWordIndex];
+  }
+}
+
+function displayFullText(words, container) {
+  container.innerHTML = words.map(word => 
+    `<span class="word">${word}</span>`
+  ).join(' ');
+}
+
+function updateWordColors() {
+  document.querySelectorAll('.word').forEach(wordSpan => {
+    const colorPair = predefinedColors[Math.floor(Math.random() * predefinedColors.length)];
+    wordSpan.style.backgroundColor = colorPair[0];
+    wordSpan.style.color = colorPair[1];
+  });
+}
+
+// Modify startWordDisplay to handle different scenes
 function startWordDisplay() {
-    if (currentWordIndex >= getCurrentWords().length) {
+  const currentWords = getCurrentWords();
+  const wordDisplay = document.getElementById('word-display');
+  
+  switch(currentScene) {
+    case 0:
+      if (currentWordIndex >= currentWords.length) {
         currentWordIndex = 0;
-        // Switch to manifesto after main text completes
-        if (currentTextSource === 'main') {
-            currentTextSource = 'manifesto';
-        }
-    }
-    
-    wordInterval = setInterval(() => {
-        const currentWords = getCurrentWords();
-        if (currentWordIndex < currentWords.length) {
-            const wordDisplay = document.getElementById('word-display');
-            const randomColorPair = predefinedColors[Math.floor(Math.random() * predefinedColors.length)];
-            
-            wordDisplay.textContent = currentWords[currentWordIndex];
-            wordDisplay.style.backgroundColor = randomColorPair[0];
-            wordDisplay.style.color = randomColorPair[1];
-            
-            currentWordIndex++;
-        } else {
-            currentWordIndex = 0;
-            if (currentTextSource === 'main') {
-                currentTextSource = 'manifesto';
-            }
-        }
-    }, 500);
+      }
+      wordInterval = setInterval(() => {
+        displayWordByWord(currentWords, wordDisplay);
+        currentWordIndex++;
+      }, 500);
+      break;
+      
+    case 1:
+      displayFullText(currentWords, wordDisplay);
+      break;
+      
+    case 2:
+      currentTextSource = 'manifesto';
+      currentWordIndex = 0;
+      const manifestoWords = getCurrentWords();
+      wordInterval = setInterval(() => {
+        displayWordByWord(manifestoWords, wordDisplay);
+        currentWordIndex++;
+      }, 500);
+      break;
+  }
 }
 
 function pauseWordDisplay() {
@@ -57,7 +80,7 @@ function pauseWordDisplay() {
 
 // Helper function to get current word array
 function getCurrentWords() {
-    return currentTextSource === 'main' ? mainWords : manifestoWords;
+    return textCollections[currentTextSource];
 }
 
 // Update the initial load call

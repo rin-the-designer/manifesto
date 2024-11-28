@@ -3,9 +3,15 @@ let currentScene = 0;
 // Function to handle the midi playback
 function playMidiStems(currentCentiseconds) {
   if (midiStems[currentCentiseconds]) {
+    // Create a log message that combines all events
+    let logMessage = `${currentCentiseconds}:`;
+    
     midiStems[currentCentiseconds].forEach(stem => {
       const [type, value] = stem;
       const midiType = midiTypes[type];
+      
+      // Add each event to the log message
+      logMessage += ` ${midiType}=${value},`;
       
       // Call the appropriate handler function
       switch(midiType) {
@@ -31,9 +37,10 @@ function playMidiStems(currentCentiseconds) {
           onBASS(value);
           break;
       }
-      
-      console.log(`${currentCentiseconds}: ${midiType}, ${value}`);
     });
+    
+    // Remove trailing comma and log the combined message
+    console.log(logMessage.slice(0, -1));
   }
 }
 
@@ -60,13 +67,18 @@ function pauseMidiPlayback() {
 
 // SCENE
 function onSCENE(value) {
-  switch(currentScene) {
-    case 0:
-      // Scene 0 behavior
-      break;
-    // ... etc
+  // Clear any existing intervals
+  if (wordInterval) {
+    clearInterval(wordInterval);
   }
+  
+  // Reset the display
+  const wordDisplay = document.getElementById('word-display');
+  wordDisplay.innerHTML = '';
+  
   currentScene = value;
+  currentWordIndex = 0;
+  startWordDisplay();
   console.log(`Scene changed to: ${value}`);
 }
 
@@ -112,11 +124,8 @@ function onSNARE(value) {
 
 // HIHAT
 function onHIHAT(value) {
-  switch(currentScene) {
-    case 0:
-      // Scene 0 behavior
-      break;
-    // ... etc
+  if (currentScene === 1) {
+    updateWordColors();
   }
 }
 

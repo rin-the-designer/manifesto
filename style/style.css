@@ -80,7 +80,18 @@ main {
 }
 
 #word-display {
-  text-align: center;
+  text-align: left;
   font-size: calc(100vw / 16);
   color: #ffffff;
+  max-width: 80vw;
+  margin: 0 auto;
+  line-height: 1.2;
+  padding: 1rem;
+}
+
+.word {
+  display: inline-block;
+  padding: 0 0.2em;
+  margin: 0.2em 0;
+  transition: all 0.3s ease;
 }
