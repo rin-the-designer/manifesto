@@ -6,6 +6,7 @@ let textCollections = {
     manifesto: []
 };
 
+// Load text from file
 async function loadText(filename) {
     try {
         const response = await fetch(`assets/text/${filename}.txt`);
@@ -22,23 +23,35 @@ async function loadTexts() {
     textCollections.manifesto = await loadText('manifesto');
 }
 
-function displayWordByWord(words, container) {
-  if (currentWordIndex < words.length) {
-    container.textContent = words[currentWordIndex];
-  }
+function displaySingleWord(words, container) {
+    if (currentWordIndex < words.length) {
+        container.textContent = words[currentWordIndex];
+    }
 }
 
-function displayFullText(words, container) {
+function displaySpecificWords(words, startIndex, endIndex, container) {
+    const textToShow = words.slice(startIndex, endIndex + 1).join(' ');
+    container.textContent = textToShow;
+}
+
+function displaySentence(words, container) {
   container.innerHTML = words.map(word => 
     `<span class="word">${word}</span>`
   ).join(' ');
 }
+// Reusable function that can color specific word indices
+function updateWordColors(specificIndices) {
+  if (!specificIndices || !Array.isArray(specificIndices)) return;
+  
+  const wordSpans = document.querySelectorAll('.word');
+  if (!wordSpans.length) return;
 
-function updateWordColors() {
-  document.querySelectorAll('.word').forEach(wordSpan => {
-    const colorPair = predefinedColors[Math.floor(Math.random() * predefinedColors.length)];
-    wordSpan.style.backgroundColor = colorPair[0];
-    wordSpan.style.color = colorPair[1];
+  wordSpans.forEach((wordSpan, index) => {
+    if (specificIndices.includes(index)) {
+      const colorPair = predefinedColors[Math.floor(Math.random() * predefinedColors.length)];
+      wordSpan.style.backgroundColor = colorPair[0];
+      wordSpan.style.color = colorPair[1];
+    }
   });
 }
 
@@ -49,17 +62,19 @@ function startWordDisplay() {
   
   switch(currentScene) {
     case 0:
-      if (currentWordIndex >= currentWords.length) {
-        currentWordIndex = 0;
-      }
-      wordInterval = setInterval(() => {
-        displayWordByWord(currentWords, wordDisplay);
-        currentWordIndex++;
-      }, 500);
+      displaySingleWord(currentWords, wordDisplay);
       break;
       
     case 1:
-      displayFullText(currentWords, wordDisplay);
+      wordDisplay.innerHTML = currentWords.map((word, index) => {
+        let styles = 'class="word"';
+        if (index === 8) {
+          styles += ' style="text-decoration: line-through;"';
+        }
+        return `<span ${styles}>${word}</span>`;
+      }).join(' ');
+      // Color specific words after they're rendered
+      
       break;
       
     case 2:
@@ -67,7 +82,7 @@ function startWordDisplay() {
       currentWordIndex = 0;
       const manifestoWords = getCurrentWords();
       wordInterval = setInterval(() => {
-        displayWordByWord(manifestoWords, wordDisplay);
+        displaySingleWord(manifestoWords, wordDisplay);
         currentWordIndex++;
       }, 500);
       break;

@@ -3,7 +3,7 @@ let predefinedColors = [
     ["#FFAA22", "#181818"],
     ["#006AFF", "#181818"],
     ["#FFFFFF", "#181818"],
-    ["#181818", "#FFFFFF"],
+    //["#181818", "#FFFFFF"],
 ];
 
 function keyPressed() {
@@ -18,4 +18,3 @@ document.addEventListener('keydown', (event) => {
       togglePlay();
   }
 });
-

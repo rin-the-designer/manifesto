@@ -46,12 +46,14 @@ function togglePlay() {
         if (isFirstPlay) {
             $intro.fadeOut(300);
             isFirstPlay = false;
+            $('#nav').hide();
+        } else {
+            $('#nav').fadeIn(300);
+            setTimeout(() => {
+                $('#nav').fadeOut(300);
+            }, 1500);
         }
         playButton.textContent = "Pause";
-        $('#nav').fadeIn(300);
-        setTimeout(() => {
-            $('#nav').fadeOut(300);
-        }, 1000);
     } else {
         audioElement.pause();
         pauseWordDisplay();
@@ -60,18 +62,18 @@ function togglePlay() {
     }
 }
 
-// Add mouse movement handler
+// Mouse movement and keyboard handler
 let timeout;
-$(document).mousemove(function() {
-    if (!audioElement.paused) {
-        $('#nav').fadeIn(300);
-        
-        clearTimeout(timeout);
-        
-        timeout = setTimeout(() => {
-            $('#nav').fadeOut(300);
-        }, 2000);
-    }
+$(document).on('mousemove keydown', function(e) {
+    // Only trigger for spacebar
+    if (e.type === 'keydown' && e.code !== 'Space') return;
+    
+    $('#nav').fadeIn(300);
+    clearTimeout(timeout);
+    
+    timeout = setTimeout(() => {
+        $('#nav').fadeOut(300);
+    }, 1500);
 });
 
 function onAudioEnded() {
