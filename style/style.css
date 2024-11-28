@@ -113,6 +113,15 @@ main {
   transition: all 0.3s ease;
 }
 
+#audio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0.01;
+  pointer-events: none;
+}
+
 audio {
   width: 0;
   height: 0;
