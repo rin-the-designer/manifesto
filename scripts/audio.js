@@ -44,7 +44,7 @@ function togglePlay() {
         startWordDisplay();
         
         if (isFirstPlay) {
-            $intro.fadeOut(300);
+            $intro.fadeOut(0);
             isFirstPlay = false;
             $('#nav').hide();
         } else {

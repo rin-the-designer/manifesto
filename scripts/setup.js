@@ -1,6 +1,3 @@
-let isAudioLoaded = false;
-let isTextLoaded = false;
-
 let predefinedColors = [
     ["#FF7700", "#181818"],
     ["#FFAA22", "#181818"],
