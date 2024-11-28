@@ -16,7 +16,6 @@ html, body {
 
 body {
   font-family: "Helvetica", "Arial", sans-serif;
-  background: var(--bg-color);
 }
 
 main {
@@ -111,18 +110,4 @@ main {
   padding: 0 0.2em;
   margin: 0.1em 0;
   transition: all 0.3s ease;
-}
-
-#audio {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  opacity: 0.01;
-  pointer-events: none;
-}
-
-audio {
-  width: 0;
-  height: 0;
 }
