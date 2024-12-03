@@ -6,6 +6,9 @@ let predefinedColors = [
     //["#181818", "#FFFFFF"],
 ];
 
+let isAudioLoaded = false;
+let isTextLoaded = false;
+
 function keyPressed() {
   if (key === ' ') {
     togglePlay();
@@ -29,3 +32,59 @@ function checkResourcesLoaded() {
       playButton.disabled = true;
   }
 }
+
+// Add this function to load all resources
+function preloadResources() {
+    // Load audio
+    loadAudio().then(() => {
+        isAudioLoaded = true;
+        checkResourcesLoaded();
+    }).catch(error => {
+        console.error('Error loading audio:', error);
+    });
+
+    // Load text
+    loadText().then(() => {
+        isTextLoaded = true;
+        checkResourcesLoaded();
+    }).catch(error => {
+        console.error('Error loading text:', error);
+    });
+}
+
+// Example audio loading function
+async function loadAudio() {
+    return new Promise((resolve, reject) => {
+        // Replace with your actual audio loading logic
+        const audio = new Audio('/assets/audio/oxygen.mp3');
+        audio.addEventListener('canplaythrough', () => {
+            resolve();
+        });
+        audio.addEventListener('error', reject);
+        audio.load();
+    });
+}
+
+// Example text loading function
+async function loadText() {
+    try {
+        const [mainResponse, manifestoResponse] = await Promise.all([
+            fetch('/assets/text/main.txt'),
+            fetch('/assets/text/manifesto.txt')
+        ]);
+
+        const mainText = await mainResponse.text();
+        const manifestoText = await manifestoResponse.text();
+
+        // Store the text content in variables that you can access later
+        window.mainText = mainText;           // or store it however you prefer
+        window.manifestoText = manifestoText;  // or store it however you prefer
+
+        return Promise.resolve();
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+// Call this when the page loads
+window.addEventListener('load', preloadResources);
