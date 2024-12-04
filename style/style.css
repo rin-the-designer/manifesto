@@ -1,6 +1,6 @@
 :root {
   --bg-color: #181818;
-  --main-color: #FF7700;
+  --main-color: #ff7700;
 }
 
 ::selection {
@@ -8,7 +8,8 @@
   background: var(--main-color);
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   background: var(--bg-color);
@@ -22,8 +23,10 @@ main {
   display: flex;
 }
 
-#intro {
-  float: left;
+/* #intro {
+  position: absolute;
+  top: calc(50vh - 150px);
+  left: calc(50vw - 150px);
   width: 300px;
   height: 300px;
   shape-outside: circle(50% at 50% 50%);
@@ -32,30 +35,37 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px;
   font-size: 24px;
   transition: opacity 0.3s ease-in-out;
+} */
+
+#intro {
+  position: absolute;
+  width: 100vw;
+  top: 0;
+  font-size: calc(100vw / 12);
 }
 
-#intro > * {
-  padding: 0.5em;
+#intro p {
   text-align: center;
+  color: #ffffff;
+  margin: 1.5rem;
 }
 
 #nav {
+  z-index: 1000;
   position: absolute;
-  bottom: 0;
+  bottom: 1.5rem;
+  left: 0;
+  right: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  width: calc(100% - 3rem);
 }
 
 .nav-item {
   position: relative;
-}
-
-.play {
   font-size: calc(100vw / 16);
   color: var(--main-color);
   background: none;
@@ -65,7 +75,7 @@ main {
   cursor: pointer;
 }
 
-.play:hover {
+.nav-item:hover {
   text-decoration: underline;
 }
 
