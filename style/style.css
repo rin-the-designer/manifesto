@@ -8,6 +8,31 @@
   background: var(--main-color);
 }
 
+:root {
+  font-family: "Inter", sans-serif;
+}
+@supports (font-variation-settings: normal) {
+  :root {
+    font-family: "InterVariable", sans-serif;
+    font-optical-sizing: auto;
+  }
+}
+
+@font-face {
+  font-family: InterVariable;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/assets/fonts/InterVariable.woff2") format("woff2");
+}
+@font-face {
+  font-family: InterVariable;
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/assets/fonts/InterVariable-Italic.woff2") format("woff2");
+}
+
 html,
 body {
   margin: 0;
@@ -16,7 +41,7 @@ body {
 }
 
 body {
-  font-family: "Helvetica", "Arial", sans-serif;
+  font-family: "InterVariable", sans-serif;
 }
 
 main {
@@ -53,15 +78,15 @@ main {
 }
 
 #nav {
-  z-index: 1000;
-  position: absolute;
-  bottom: 1.5rem;
+  z-index: 2000;
+  position: fixed;
+  bottom: 0;
   left: 0;
   right: 0;
   display: flex;
   justify-content: space-between;
-  padding: 0 1.5rem;
-  width: calc(100% - 3rem);
+  padding: 1.5rem;
+  background: var(--bg-color);
 }
 
 .nav-item {
@@ -120,4 +145,34 @@ main {
   padding: 0 0.2em;
   margin: 0.1em 0;
   transition: all 0.3s ease;
+}
+
+#read-content {
+  display: none;
+  z-index: 1000;
+  position: absolute;
+  background: var(--bg-color);
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+#read-content b {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: calc(100vw / 16);
+}
+
+#manifesto-text {
+  color: #ffffff99;
+  font-weight: 200;
+  line-height: 1.4em;
+  font-size: calc(100vw / 28);
+  padding-bottom: calc(100vw / 28 * 1.4 + 3rem);
+}
+
+#main-text {
+  color: #ffffffcc;
+  font-weight: 500;
+  line-height: 1.4em;
+  font-size: calc(100vw / 28);
 }
