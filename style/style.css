@@ -86,7 +86,6 @@ main {
   display: flex;
   justify-content: space-between;
   padding: 1.5rem;
-  background: var(--bg-color);
 }
 
 .nav-item {
@@ -137,7 +136,14 @@ main {
 }
 
 #word-display.scene2-1 {
-  font-size: calc(100vw / 16);
+  font-size: calc(100vw / 24);
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .word {
@@ -175,4 +181,16 @@ main {
   font-weight: 500;
   line-height: 1.4em;
   font-size: calc(100vw / 28);
+}
+
+#p5_loading {
+  display: none;
+  line-height: 1.2em;
+  font-size: calc(100vw / 16);
+  padding: 1.5vw;
+  color: #ffffff;
+}
+
+.display-none {
+  display: none !important;
 }

@@ -1,6 +1,6 @@
 const audioElement = document.querySelector("audio");
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const playButton = document.querySelector("#play");
-let isFirstPlay = true;
 
 audioElement.addEventListener("play", startMidiPlayback);
 audioElement.addEventListener("pause", pauseMidiPlayback);
@@ -44,78 +44,45 @@ if ("mediaSession" in navigator) {
       },
     ],
   });
-
-  navigator.mediaSession.setActionHandler("play", function () {
-    audioElement.play();
-    startWordDisplay();
-    playButton.textContent = "Pause";
-  });
-
-  navigator.mediaSession.setActionHandler("pause", function () {
-    audioElement.pause();
-    pauseWordDisplay();
-    playButton.textContent = "Play";
-  });
 }
 
 function togglePlay() {
-  const $intro = $("#intro");
-  const $readContent = $("#read-content");
-
+  audioContext.resume();
   if (audioElement.paused) {
     audioElement.play();
     startWordDisplay();
-    $readContent.fadeOut(0);
-    $intro.fadeOut(0);
-
-    if (isFirstPlay) {
-      isFirstPlay = false;
-      $("#nav").hide();
-    } else {
-      if (!$intro.is(":visible")) {
-        $("#nav").fadeIn(300);
-        setTimeout(() => {
-          $("#nav").fadeOut(300);
-        }, 1500);
-      }
-    }
     playButton.textContent = "Pause";
+    $("#intro").addClass("display-none");
   } else {
     audioElement.pause();
     pauseWordDisplay();
     playButton.textContent = "Play";
-    $("#nav").fadeIn(300);
   }
-}
-
-// Mouse movement and keyboard handler
-let timeout;
-$(document).on("mousemove keydown", function (e) {
-  // Only trigger for spacebar
-  if (e.type === "keydown" && e.code !== "Space") return;
-
-  const $intro = $("#intro");
-  $("#nav").fadeIn(300);
-
-  if (!$intro.is(":visible")) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      $("#nav").fadeOut(300);
-    }, 1500);
-  }
-});
-
-function onAudioEnded() {
-  playButton.textContent = "Restart";
-  $intro.fadeIn(300);
-  $("#nav").fadeIn(300);
-  pauseWordDisplay();
 }
 
 $(function () {
   function initEvents() {
     $("#play").on("mousedown", togglePlay);
-    audioElement.addEventListener("ended", onAudioEnded);
+
+    var i = null;
+    $(document).on("mousemove", function () {
+      clearTimeout(i);
+      $("#nav").removeClass("display-none");
+      i = setTimeout(() => {
+        if ($("#intro").css("display") !== "block") {
+          $("#nav").addClass("display-none");
+        }
+      }, 1000);
+    });
+
+    $(audioElement)
+      .on("play", function () {})
+      .on("pause", function () {})
+      .on("ended", function () {
+        playButton.textContent = "Restart";
+        $("#nav, #intro").removeClass("display-none");
+        pauseWordDisplay();
+      });
   }
 
   function init() {

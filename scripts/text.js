@@ -6,6 +6,11 @@ let textCollections = {
   manifesto: [],
 };
 
+function loadFiles() {
+  files[MAIN] = loadStrings("/assets/text/main.txt");
+  files[MANIFESTO] = loadStrings("/assets/text/manifesto.txt");
+}
+
 // Load text from file
 async function loadText(filename) {
   try {
@@ -30,13 +35,39 @@ async function loadTexts() {
 
 function displaySingleWord(words, container) {
   if (currentWordIndex < words.length) {
-    container.textContent = words[currentWordIndex];
+    if (
+      currentScene === 2 ||
+      currentScene === 3 ||
+      currentScene === 4 ||
+      currentScene === 5 ||
+      currentScene === 6 ||
+      currentScene === 7 ||
+      currentScene === 8 ||
+      currentScene === 9
+    ) {
+      // For scene 2, append words instead of replacing
+      const wordSpan = document.createElement("span");
+      wordSpan.className = "word";
+      wordSpan.textContent = words[currentWordIndex];
+      container.appendChild(wordSpan);
+    } else {
+      // Original behavior for other scenes
+      container.textContent = words[currentWordIndex];
+    }
   }
 }
 
-function displaySpecificWords(words, startIndex, endIndex, container) {
-  const textToShow = words.slice(startIndex, endIndex + 1).join(" ");
-  container.textContent = textToShow;
+function displayMultipleWords(words, spliceCount, container) {
+  const endIndex = currentWordIndex + spliceCount - 1;
+  $(container).text(words.slice(currentWordIndex, endIndex + 1).join(" "));
+  currentWordIndex = endIndex + 1; // Update currentWordIndex to the next position
+}
+
+function displaySpecificWords(words, wordIndex, spliceCount, container) {
+  currentWordIndex = wordIndex;
+  const endIndex = wordIndex + spliceCount - 1;
+  $(container).text(words.slice(currentWordIndex, endIndex + 1).join(" "));
+  currentWordIndex = endIndex + 1; // Update currentWordIndex to the next position
 }
 
 function displaySentence(words, container) {
@@ -68,7 +99,6 @@ function startWordDisplay() {
 
   switch (currentScene) {
     case 0:
-      displaySingleWord(currentWords, wordDisplay);
       break;
 
     case 1:
@@ -81,18 +111,19 @@ function startWordDisplay() {
           return `<span ${styles}>${word}</span>`;
         })
         .join(" ");
-      // Color specific words after they're rendered
-
       break;
 
     case 2:
-      currentTextSource = "manifesto";
       currentWordIndex = 0;
-      const manifestoWords = getCurrentWords();
-      wordInterval = setInterval(() => {
-        displaySingleWord(manifestoWords, wordDisplay);
-        currentWordIndex++;
-      }, 500);
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+      currentTextSource = "manifesto";
+      wordDisplay.innerHTML = ""; // Clear the container
       break;
   }
 }
