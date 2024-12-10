@@ -149,31 +149,11 @@ function onKICK(value) {
   const wordDisplay = document.getElementById("word-display");
   if (currentScene === 0) {
   } else if (currentScene === 1) {
-  } else if (currentScene === 2) {
-    //switch (currentCentiseconds) {
-    // case 1600:
-    //   $("#word-display").addClass("scene0-1");
-    //   displayMultipleWords(getCurrentWords(), 1, wordDisplay);
-    //   break;
-    // case 1700:
-    //   displayMultipleWords(getCurrentWords(), 1, wordDisplay);
-    //   break;
-    // case 1800:
-    //   displayMultipleWords(getCurrentWords(), 2, wordDisplay);
-    //   break;
-    // default:
+  } else if (currentScene >= 2 && currentScene <= 9) {
     if (currentCentiseconds >= 1600) {
       displaySingleWord(getCurrentWords(), wordDisplay);
       currentWordIndex++;
     }
-    //}
-  } else if (currentScene === 3) {
-  } else if (currentScene === 4) {
-  } else if (currentScene === 5) {
-  } else if (currentScene === 6) {
-  } else if (currentScene === 7) {
-  } else if (currentScene === 8) {
-  } else if (currentScene === 9) {
   }
 }
 
@@ -182,30 +162,11 @@ function onSNARE(value) {
   const wordDisplay = document.getElementById("word-display");
   if (currentScene === 0) {
   } else if (currentScene === 1) {
-  } else if (currentScene === 2) {
-    switch (currentCentiseconds) {
-      // case 1650:
-      //   displayMultipleWords(getCurrentWords(), 2, wordDisplay);
-      //   break;
-      // case 1750:
-      //   displayMultipleWords(getCurrentWords(), 2, wordDisplay);
-      //   break;
-      // case 1850:
-      //   displaySpecificWords(getCurrentWords(), 6, 2, wordDisplay);
-      //   break;
-      default:
-        if (currentCentiseconds >= 1600) {
-          displaySingleWord(getCurrentWords(), wordDisplay);
-          currentWordIndex++;
-        }
+  } else if (currentScene >= 2 && currentScene <= 9) {
+    if (currentCentiseconds >= 1600) {
+      displaySingleWord(getCurrentWords(), wordDisplay);
+      currentWordIndex++;
     }
-  } else if (currentScene === 3) {
-  } else if (currentScene === 4) {
-  } else if (currentScene === 5) {
-  } else if (currentScene === 6) {
-  } else if (currentScene === 7) {
-  } else if (currentScene === 8) {
-  } else if (currentScene === 9) {
   }
 }
 
